@@ -1,0 +1,10 @@
+//
+//  TestScreen.swift
+//  DailyQuiz
+//
+//  Created by Вениамин Гребенёв on 01.08.2025.
+//
+
+struct ResultScreen {
+    ч
+}
