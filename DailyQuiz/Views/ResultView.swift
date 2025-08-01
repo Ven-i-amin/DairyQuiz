@@ -5,6 +5,10 @@
 //  Created by Вениамин Гребенёв on 01.08.2025.
 //
 
-struct ResultScreen {
-    ч
+import SwiftUI
+
+struct ResultView: View {
+    var body: some View {
+
+    }
 }
