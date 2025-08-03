@@ -7,7 +7,8 @@
 
 import Foundation
 
-public class Question{
+struct Question: Codable {
+    let id = UUID()
     let type: String;
     let difficulty: String;
     let category: String;
@@ -15,12 +16,11 @@ public class Question{
     let correctAnswer: String;
     let incorrectAnswers: [String];
     
-    init(type: String, difficulty: String, category: String, question: String, correctAnswer: String, incorrectAnswers: [String]) {
-        self.type = type
-        self.difficulty = difficulty
-        self.category = category
-        self.question = question
-        self.correctAnswer = correctAnswer
-        self.incorrectAnswers = incorrectAnswers
+    // MARK: - Codable
+    
+    enum CodingKeys: String, CodingKey {
+        case category, type, difficulty, question
+        case correctAnswer = "correct_answer"
+        case incorrectAnswers = "incorrect_answers"
     }
 }

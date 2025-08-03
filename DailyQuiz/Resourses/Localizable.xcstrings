@@ -1,6 +1,28 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "CantReturn" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуться к предыдущим вопросам нельзя"
+          }
+        }
+      }
+    },
+    "FailedQuiz" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка! Попробуйте ещё раз"
+          }
+        }
+      }
+    },
     "History" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8,6 +30,20 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "История"
+          }
+        }
+      }
+    },
+    "Question" : {
+
+    },
+    "QuestionNum" : {
+      "comment" : "u",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вопрос \\(questionIndex) из \\(questionCount)"
           }
         }
       }
@@ -22,6 +58,9 @@
           }
         }
       }
+    },
+    "Uoifhdsk;jaflk;s" : {
+
     },
     "Welcome" : {
       "extractionState" : "manual",

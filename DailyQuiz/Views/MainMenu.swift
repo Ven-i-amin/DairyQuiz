@@ -8,29 +8,109 @@
 import SwiftUI
 
 struct MainMenu: View {
+    @State
+    private var showMenu = true;
+    
+    @State
+    private var failedGetQuiz = false;
+    
+    @StateObject
+    public var quizManager = QuizManager();
+    
+    @State
+    private var startQuiz = false;
+    
     var body: some View {
-        ZStack {
-            Color("App")
-                .ignoresSafeArea()
-            
-            VStack {
-                history
-                    .padding(.top, 40)
-                
-                Spacer()
+        NavigationStack {
+            ZStack {
+                Color("App")
+                    .ignoresSafeArea()
                 
                 VStack {
+                    ZStack {
+                        if showMenu {
+                            history
+                        } else {
+                            history
+                                .hidden()
+                        }
+                    }
+                    .padding(.top, 40)
+                    
+                    Spacer()
+                    
                     logo
                         .padding(.bottom, 30)
                     
+                    ZStack {
+                        if showMenu {
+                            menu
+                        } else {
+                            menu
+                                .hidden()
+                            
+                            Image("Loader")
+                        }
+                    }
+                    .padding(.bottom, 50)
                     
-                    menu
+                    if failedGetQuiz {
+                        Text("FailedQuiz")
+                            .font(.system(size: 20))
+                            .bold()
+                            .foregroundStyle(Color("View"))
+                    }
+                    
+                    Spacer()
                 }
-                .padding(.bottom, 70)
-                
-                Spacer()
             }
         }
+        .onAppear() {
+            resetStates()
+        }
+    }
+    
+    private func fetchData() {
+        guard let url = URL(string: "https://opentdb.com/api.php?amount=5&type=multiple&category=9&difficulty=easy") else {
+            print("url error")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print(error)
+                failedGet()
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                print("response error")
+                failedGet()
+                return
+            }
+            
+            guard let data = data else {
+                print("data error")
+                failedGet()
+                return
+            }
+            
+            do {
+                quizManager.quiz = try JSONDecoder().decode(Quiz.self, from: data)
+                print(quizManager.quiz?.id as Any)
+                
+                startQuiz = true;
+            } catch {
+                print(error)
+                failedGet()
+            }
+        }.resume()
+    }
+    
+    private func failedGet(){
+        failedGetQuiz = true
+        showMenu = true
     }
 }
 
@@ -54,32 +134,39 @@ extension MainMenu {
     }
     
     var menu: some View {
-        VStack {
+        WhiteSquareView {
             Text("Welcome")
                 .font(.system(size: 32))
                 .bold()
                 .multilineTextAlignment(.center)
             
-            Button(action: {
-                print("todo")
-            }) {
-                Text("Start")
-                    .fontWeight(.heavy)
-                    .textCase(.uppercase)
-            }
-            .foregroundColor(Color("View"))
-            .padding(16)
-            .background(Color("Active"))
-            .containerShape(RoundedRectangle(cornerRadius: 16))
+            DefaultButton(
+                buttonAction: startAction,
+                buttonText: "Start",
+                isActive: true
+            )
+            .padding(5)
+            .navigationDestination(
+                isPresented: $startQuiz,
+                destination: {
+                    QuizView(
+                        quizManager: quizManager,
+                        backButton: BackButton(backFunc: resetStates)
+                    );
+                }
+            )
         }
-        .padding(.top, 32)
-        .padding(.bottom, 32)
-        .padding(.leading, 24)
-        .padding(.trailing, 24)
-        .background(Color("View"))
-        .containerShape(RoundedRectangle(cornerRadius: 46))
-        .padding(.leading, 2)
-        .padding(.trailing, 2)
+        
+    }
+    
+    func startAction() {
+        showMenu = false
+        fetchData()
+    }
+    
+    private func resetStates() {
+        showMenu = true;
+        failedGetQuiz = false;
     }
 }
 
