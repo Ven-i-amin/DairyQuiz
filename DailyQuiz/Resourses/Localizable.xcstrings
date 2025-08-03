@@ -12,6 +12,138 @@
         }
       }
     },
+    "CheeringText0" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0/5 — не отчаивайтесь. Начните заново и удивите себя!"
+          }
+        }
+      }
+    },
+    "CheeringText1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1/5 — иногда просто не ваш день. Следующая попытка будет лучше!"
+          }
+        }
+      }
+    },
+    "CheeringText2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2/5 — не расстраивайтесь, попробуйте ещё раз!"
+          }
+        }
+      }
+    },
+    "CheeringText3" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3/5 — вы на верном пути. Продолжайте тренироваться!"
+          }
+        }
+      }
+    },
+    "CheeringText4" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4/5 — очень близко к совершенству. Ещё один шаг!"
+          }
+        }
+      }
+    },
+    "CheeringText5" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5/5 — вы ответили на всё правильно. Это блестящий результат!"
+          }
+        }
+      }
+    },
+    "CheeringTitle0" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бывает и так!"
+          }
+        }
+      }
+    },
+    "CheeringTitle1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сложный вопрос?"
+          }
+        }
+      }
+    },
+    "CheeringTitle2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Есть над чем поработать"
+          }
+        }
+      }
+    },
+    "CheeringTitle3" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хороший результат!"
+          }
+        }
+      }
+    },
+    "CheeringTitle4" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Почти идеально!"
+          }
+        }
+      }
+    },
+    "CheeringTitle5" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Идеально!"
+          }
+        }
+      }
+    },
     "FailedQuiz" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19,6 +151,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ошибка! Попробуйте ещё раз"
+          }
+        }
+      }
+    },
+    "Finish" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершить"
           }
         }
       }
@@ -34,16 +177,58 @@
         }
       }
     },
-    "Question" : {
-
-    },
-    "QuestionNum" : {
-      "comment" : "u",
+    "Next" : {
+      "extractionState" : "manual",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вопрос \\(questionIndex) из \\(questionCount)"
+            "value" : "Далее"
+          }
+        }
+      }
+    },
+    "Question" : {
+
+    },
+    "QuestionCount" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вопрос %@ из %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вопрос %@ из %@"
+          }
+        }
+      }
+    },
+    "QuestionNum" : {
+
+    },
+    "RatingText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ из %@"
+          }
+        }
+      }
+    },
+    "Results" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Результаты"
           }
         }
       }
@@ -55,6 +240,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Начать викторину"
+          }
+        }
+      }
+    },
+    "StartAgain" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начать заново"
           }
         }
       }

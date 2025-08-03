@@ -14,11 +14,11 @@ struct MainMenu: View {
     @State
     private var failedGetQuiz = false;
     
-    @StateObject
-    public var quizManager = QuizManager();
-    
     @State
     private var startQuiz = false;
+    
+    @StateObject
+    private var quizManager: QuizManager = QuizManager();
     
     var body: some View {
         NavigationStack {
@@ -39,8 +39,10 @@ struct MainMenu: View {
                     
                     Spacer()
                     
-                    logo
+                    LogoView()
                         .padding(.bottom, 30)
+                        .padding(.leading, 48)
+                        .padding(.trailing, 48)
                     
                     ZStack {
                         if showMenu {
@@ -65,61 +67,10 @@ struct MainMenu: View {
                 }
             }
         }
-        .onAppear() {
-            resetStates()
-        }
-    }
-    
-    private func fetchData() {
-        guard let url = URL(string: "https://opentdb.com/api.php?amount=5&type=multiple&category=9&difficulty=easy") else {
-            print("url error")
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print(error)
-                failedGet()
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                print("response error")
-                failedGet()
-                return
-            }
-            
-            guard let data = data else {
-                print("data error")
-                failedGet()
-                return
-            }
-            
-            do {
-                quizManager.quiz = try JSONDecoder().decode(Quiz.self, from: data)
-                print(quizManager.quiz?.id as Any)
-                
-                startQuiz = true;
-            } catch {
-                print(error)
-                failedGet()
-            }
-        }.resume()
-    }
-    
-    private func failedGet(){
-        failedGetQuiz = true
-        showMenu = true
     }
 }
 
 extension MainMenu {
-    var logo: some View {
-        VStack{
-            Image("Logo")
-        }
-    }
     
     var history: some View {
         HStack {
@@ -152,21 +103,37 @@ extension MainMenu {
                     QuizView(
                         quizManager: quizManager,
                         backButton: BackButton(backFunc: resetStates)
-                    );
+                    )
                 }
             )
         }
         
     }
     
-    func startAction() {
+    // MARK: - State control
+    
+    private func startAction() {
         showMenu = false
-        fetchData()
+        
+        Network.getQuiz(
+            failGetFunc: failGetQuiz,
+            successGetFunc: successGetQuiz
+        )
     }
     
     private func resetStates() {
-        showMenu = true;
-        failedGetQuiz = false;
+        showMenu = true
+        failedGetQuiz = false
+    }
+    
+    private func failGetQuiz(){
+        failedGetQuiz = true
+        showMenu = true
+    }
+    
+    private func successGetQuiz(quiz: Quiz){
+        quizManager.quiz = quiz
+        startQuiz = true
     }
 }
 

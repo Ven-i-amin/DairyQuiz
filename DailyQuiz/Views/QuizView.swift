@@ -13,13 +13,20 @@ struct QuizView: View {
     private var quizManager: QuizManager;
     
     @State
+    private var quizFinished = false;
+    
+    @State
+    private var userAnswers: [String] = [];
+    
+    @State
     private var selectedAnswer = "";
     
-    private let backButton: BackButton;
-    
-    @State private var questionIndex = 1;
+    @State
+    private var questionIndex = 1;
     
     private let questionCount: Int;
+    
+    private let backButton: BackButton;
     
     init(quizManager: QuizManager, backButton: BackButton) {
         self.quizManager = quizManager
@@ -29,51 +36,105 @@ struct QuizView: View {
     }
     
     var body: some View {
-        ZStack {
-            Color("App")
-                .ignoresSafeArea()
-            
-            VStack {
-                menu
+        NavigationStack {
+                ZStack(alignment: .top) {
+                Color("App")
+                    .ignoresSafeArea()
                 
-                Text("CantReturn")
-                    .foregroundStyle(Color("View"))
-                    .font(.system(size: 10))
-            }
-        }
+                ScrollView {
+                    ToolBarView(backButton: backButton) {
+                        LogoView()
+                            .frame(width: 180)
+                            .fixedSize()
+                    }
+                    
+                    VStack {
+                        Spacer()
+                        
+                        questionAnswer
+                            .padding(10)
+                        
+                        miniText
+                    }
+                    .padding(.bottom, 100)
+                }
+                }
             .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: backButton)
+        }
     }
 }
 
 extension QuizView {
-    var menu: some View {
+    var questionAnswer: some View {
         WhiteSquareView {
-            Text("QuestionCount")
-            
-            Text("Question")
-            
-//            RadioButton(
-//                answersTexts: quizManager.getAllQuestions(index: questionIndex - 1),
-//            selectedAnswer: $selectedAnswer)
-            
-            RadioButton(
-                answersTexts: ["1", "2", "3", "4"],
-            selectedAnswer: $selectedAnswer
-            )
+            VStack {
+                questionCounter
+                    .padding(.bottom, 10)
+                
+                questionText
+                .padding(.bottom, 10)
+                
+                RadioButton(
+                    answersTexts: quizManager.getAllQuestionAnswers(
+                        index: questionIndex - 1
+                    ),
+                    selectedAnswer: $selectedAnswer
+                )
+            }
+            .padding(.bottom, 50)
             
             if isFinalQuestion() {
                 DefaultButton(
                     buttonAction: finishQuiz,
                     buttonText: "Finish",
                     isActive: selectedAnswer != "")
+                .navigationDestination(
+                    isPresented: $quizFinished,
+                    destination: {
+                        ResultView(
+                            userAnswers: $userAnswers,
+                            quizManager: quizManager,
+                            backButton: backButton
+                        )
+                    }
+                )
             } else {
                 DefaultButton(
                     buttonAction: nextQuestion,
                     buttonText: "Next",
                     isActive: selectedAnswer != "")
+
             }
         }
+    }
+    
+    var questionCounter: some View {
+        Text(String(
+            format: NSLocalizedString("QuestionCount", comment: ""),
+            "\(questionIndex)",
+            "\(questionCount)"
+        ))
+        .foregroundColor(Color("QuestionCount"))
+        .font(.system(size:16))
+        .bold()
+    }
+    
+    var questionText: some View {
+        Text(quizManager.getQuestionText(
+            index: questionIndex - 1
+        ))
+        .foregroundColor(Color("RegularText"))
+        .font(.system(size: 18))
+        .bold()
+        .multilineTextAlignment(.center)
+        .lineLimit(nil)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+    
+    var miniText: some View {
+        Text("CantReturn")
+            .foregroundStyle(Color("View"))
+            .font(.system(size: 10))
     }
     
     private func isFinalQuestion() -> Bool{
@@ -82,10 +143,16 @@ extension QuizView {
     
     private func nextQuestion() {
         questionIndex += 1
+        
+        userAnswers.append(selectedAnswer)
+        
+        selectedAnswer = ""
     }
     
     private func finishQuiz() {
-        //todo
+        userAnswers.append(selectedAnswer)
+        
+        quizFinished = true
     }
 }
 

@@ -24,8 +24,8 @@ struct WhiteSquareView<Content: View>: View {
         .padding(.trailing, 24)
         .background(Color("View"))
         .containerShape(RoundedRectangle(cornerRadius: 46))
-        .padding(.top, 32)
-        .padding(.bottom, 32)
+//        .padding(.top, 32)
+//        .padding(.bottom, 32)
         .padding(.leading, 24)
         .padding(.trailing, 24)
     }

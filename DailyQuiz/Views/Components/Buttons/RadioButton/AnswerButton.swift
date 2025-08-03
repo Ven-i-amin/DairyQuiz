@@ -55,6 +55,8 @@ struct AnswerButton: View, Hashable {
                 
                 Text(LocalizedStringResource(stringLiteral: text))
                     .font(.system(size: 14))
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .frame(
                 maxWidth: .infinity,
@@ -80,6 +82,8 @@ struct AnswerButton: View, Hashable {
                 
                 Text(LocalizedStringResource(stringLiteral: text))
                     .font(.system(size: 14))
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .frame(
                 maxWidth: .infinity,
@@ -107,6 +111,8 @@ struct AnswerButton: View, Hashable {
                 
                 Text(LocalizedStringResource(stringLiteral: text))
                     .font(.system(size: 14))
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .frame(
                 maxWidth: .infinity,
@@ -133,6 +139,8 @@ struct AnswerButton: View, Hashable {
                     .frame(width: 20)
                 Text(LocalizedStringResource(stringLiteral: text))
                     .font(.system(size: 14))
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .frame(
                 maxWidth: .infinity,
