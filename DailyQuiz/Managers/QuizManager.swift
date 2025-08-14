@@ -8,6 +8,7 @@
 import Foundation
 
 class QuizManager: ObservableObject, Identifiable, Hashable {
+    // MARK: - Properties
     var id = UUID();
     
     @Published
@@ -17,28 +18,44 @@ class QuizManager: ObservableObject, Identifiable, Hashable {
         self.quiz = quiz
     }
     
-    public func getAllQuestionAnswers(index: Int) -> [String] {
-        if (index < 0 || quiz!.results.count < index) {
-            return []
-        }
-        
-        var arr: [String] = []
-        
-        arr.append(quiz!.results[index].correctAnswer)
-        arr.append(contentsOf: quiz!.results[index].incorrectAnswers)
-        
-        return arr;
+    // MARK: - Manager to Service
+    
+    func loadQuiz(byCompletion: @escaping (Quiz?) -> Void) {
+        QuizService.get(completion: { quiz in
+            self.setQuiz(quiz: quiz)
+            byCompletion(quiz)
+        })
     }
     
-    public func getQuestionText(index: Int) -> String {
+    // MARK: - Managment
+    func setQuiz(quiz: Quiz?) {
+        self.quiz = quiz
+    }
+    
+    func getAllQuestionAnswers(index: Int) -> [String] {
+        guard let quiz = self.quiz else {
+            return [];
+        }
+        
+        return Self.getAllQuestionAnswers(
+            index: index,
+            quiz: quiz
+        )
+    }
+    
+    func getQuestionText(index: Int) -> String {
         return quiz?.results[index].question ?? "";
     }
     
-    public func getQuestionCount() -> Int {
+    func getCorrectAnswer(index: Int) -> String {
+        return quiz?.results[index].correctAnswer ?? "";
+    }
+    
+    func getQuestionCount() -> Int {
         return quiz?.results.count ?? 0;
     }
     
-    public func countRightAnswers(userAnswers: [String]) -> Int {
+    func countRightAnswers(userAnswers: [String]) -> Int {
         var count = 0
         for i in 0..<min(userAnswers.count, getQuestionCount()) {
             if userAnswers[i] == quiz!.results[i].correctAnswer {
@@ -46,6 +63,23 @@ class QuizManager: ObservableObject, Identifiable, Hashable {
             }
         }
         return count
+    }
+    
+    // MARK: - static
+    
+    static func getAllQuestionAnswers(index: Int, quiz: Quiz) -> [String] {
+        if (index < 0 || quiz.results.count < index) {
+            return []
+        }
+        
+        var arr: [String] = []
+        
+        arr.append(quiz.results[index].correctAnswer)
+        arr.append(contentsOf: quiz.results[index].incorrectAnswers)
+        
+        return arr.sorted {
+            ($0.hashValue) < ($1.hashValue)
+        }
     }
     
     // MARK: - Hashable
@@ -60,7 +94,7 @@ class QuizManager: ObservableObject, Identifiable, Hashable {
 }
 
 extension QuizManager {
-    // MARK: - Make preview working
+    // MARK: - Preview
     
     static func previewInstance() -> QuizManager {
         return QuizManager(quiz: Quiz(

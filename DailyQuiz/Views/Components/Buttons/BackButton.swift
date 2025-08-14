@@ -22,7 +22,6 @@ struct BackButton: View {
         ZStack {
             Button(action: {
                 backFunc()
-                //            self.presentationMode.wrappedValue.dismiss()
             }) {
                 
                 Image("Back")

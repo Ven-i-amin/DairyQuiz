@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct QuizView: View {
-    
     @ObservedObject
     private var quizManager: QuizManager;
     
-    @State
-    private var quizFinished = false;
+    @Binding
+    private var userAnswers: [String];
     
-    @State
-    private var userAnswers: [String] = [];
+    @Binding
+    private var path: NavigationPath;
     
     @State
     private var selectedAnswer = "";
@@ -26,41 +25,43 @@ struct QuizView: View {
     
     private let questionCount: Int;
     
-    private let backButton: BackButton;
-    
-    init(quizManager: QuizManager, backButton: BackButton) {
+    init (
+        quizManager: QuizManager,
+        userAnswers: Binding<[String]>,
+        path: Binding<NavigationPath>
+    ) {
         self.quizManager = quizManager
-        self.backButton = backButton
-        
         self.questionCount = quizManager.getQuestionCount()
+        self._userAnswers = userAnswers
+        self._path = path
     }
     
     var body: some View {
-        NavigationStack {
-                ZStack(alignment: .top) {
-                Color("App")
-                    .ignoresSafeArea()
+        ZStack(alignment: .top) {
+            Color("App")
+                .ignoresSafeArea()
+            
+            ScrollView {
+                ToolBarView(backButton: BackButton(
+                    backFunc: ViewTransition.returnToLastScreen(path: $path)
+                )) {
+                    LogoView()
+                        .frame(width: 180)
+                        .fixedSize()
+                }
                 
-                ScrollView {
-                    ToolBarView(backButton: backButton) {
-                        LogoView()
-                            .frame(width: 180)
-                            .fixedSize()
-                    }
+                VStack {
+                    Spacer()
                     
-                    VStack {
-                        Spacer()
-                        
-                        questionAnswer
-                            .padding(10)
-                        
-                        miniText
-                    }
-                    .padding(.bottom, 100)
+                    questionAnswer
+                        .padding(10)
+                    
+                    miniText
                 }
-                }
-            .navigationBarBackButtonHidden(true)
+                .padding(.bottom, 100)
+            }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -72,9 +73,9 @@ extension QuizView {
                     .padding(.bottom, 10)
                 
                 questionText
-                .padding(.bottom, 10)
+                    .padding(.bottom, 10)
                 
-                RadioButton(
+                RadioView(
                     answersTexts: quizManager.getAllQuestionAnswers(
                         index: questionIndex - 1
                     ),
@@ -88,22 +89,12 @@ extension QuizView {
                     buttonAction: finishQuiz,
                     buttonText: "Finish",
                     isActive: selectedAnswer != "")
-                .navigationDestination(
-                    isPresented: $quizFinished,
-                    destination: {
-                        ResultView(
-                            userAnswers: $userAnswers,
-                            quizManager: quizManager,
-                            backButton: backButton
-                        )
-                    }
-                )
             } else {
                 DefaultButton(
                     buttonAction: nextQuestion,
                     buttonText: "Next",
                     isActive: selectedAnswer != "")
-
+                
             }
         }
     }
@@ -152,13 +143,17 @@ extension QuizView {
     private func finishQuiz() {
         userAnswers.append(selectedAnswer)
         
-        quizFinished = true
+        path.append(Navigation.result)
+    }
+    
+    private func returnBack() {
     }
 }
 
 #Preview {
     QuizView(
         quizManager: QuizManager.previewInstance(),
-        backButton: BackButton(backFunc: {return})
+        userAnswers: .constant([]),
+        path: .constant(NavigationPath())
     )
 }

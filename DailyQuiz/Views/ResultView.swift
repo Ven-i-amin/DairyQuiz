@@ -8,25 +8,29 @@
 import SwiftUI
 
 struct ResultView: View {
+    @EnvironmentObject
+    var historyManager: HistoryManager;
+    
     @ObservedObject
     private var quizManager: QuizManager;
     
     @Binding
     private var userAnswers: [String];
     
+    @Binding
+    private var path: NavigationPath;
+    
     @State
     private var reviewFinished = false;
-    
-    private let backButton: BackButton;
     
     init(
         userAnswers: Binding<[String]>,
         quizManager: QuizManager,
-        backButton: BackButton
+        path: Binding<NavigationPath>
     ) {
         self._userAnswers = userAnswers
         self.quizManager = quizManager
-        self.backButton = backButton
+        self._path = path
     }
     
     
@@ -42,82 +46,46 @@ struct ResultView: View {
                         .fontWeight(.heavy)
                 }
                 
-                menu
+                QuizMarkView(
+                    quizManager: quizManager,
+                    userAnswers: userAnswers,
+                ) {
+                    DefaultButton(
+                        buttonAction: finishReview,
+                        buttonText: "StartAgain",
+                        isActive: true
+                    )
+                    .padding(.top, 50)
+                }
             }
         }
         .navigationBarBackButtonHidden(true)
-    }
-}
-
-extension ResultView {
-    var rightQuestionCount: Int {
-        quizManager.countRightAnswers(userAnswers: userAnswers)
-    }
-    
-    var questionCount: Int {
-        quizManager.getQuestionCount()
-    }
-
-    var menu: some View {
-        WhiteSquareView {
-            stars
-                .padding(.bottom, 20)
-            
-            rightAnswerCount
-                .padding(.bottom, 20)
-            
-            cheers
-                .padding(.bottom, 50)
-            
-            DefaultButton(
-                buttonAction: finishReview,
-                buttonText: "StartAgain",
-                isActive: true
-            )
+        .onAppear() {
+            addQuizToHistory()
         }
     }
     
-    var stars: some View {
-        return HStack {
-            ForEach(0..<self.rightQuestionCount, id: \.self) { _ in
-                Image("Active")
-                    .padding(.leading, 5)
-            }
-            
-            ForEach(self.rightQuestionCount..<self.questionCount, id: \.self) { _ in
-                Image("Unactive")
-                    .padding(.leading, 5)
-            }
+    private func addQuizToHistory(){
+        guard let quiz = quizManager.quiz else {
+            return
         }
-    }
-    
-    var rightAnswerCount: some View {
-        Text(String(
-            format: NSLocalizedString("QuestionCount", comment: ""),
-            "\(rightQuestionCount)",
-            "\(self.questionCount)"
-        ))
-            .foregroundStyle(Color("RatingText"))
-            .font(.system(size: 16))
-            .bold()
-    }
-    
-    var cheers: some View {
-        return VStack {
-            Text(LocalizedStringResource("CheeringTitle\(self.rightQuestionCount)"))
-                .foregroundStyle(Color("RegularText"))
-                .font(.system(size: 24))
-                .bold()
-                .padding(.bottom, 10)
-            
-            Text(LocalizedStringResource("CheeringText\(self.rightQuestionCount)"))
-                .font(.system(size: 16))
+        
+        guard historyManager.userHistory != nil else {
+            historyManager.createUserHistory()
+            return
         }
+        
+        historyManager.addQuizTry(
+            quizTry:
+                QuizTry(
+                    quiz: quiz,
+                    userAnswers: userAnswers
+                )
+        )
     }
     
     private func finishReview(){
-        //todo save
-        backButton.backFunc()
+        ViewTransition.returnToMainPage(path: $path)()
     }
 }
 
@@ -125,6 +93,6 @@ extension ResultView {
     ResultView(
         userAnswers: .constant(["incorrect1", "100"]),
         quizManager: QuizManager.previewInstance(),
-        backButton: BackButton(backFunc: {return})
-    )
+        path: .constant(NavigationPath())
+    ).environmentObject(HistoryManager.previewInstance())
 }

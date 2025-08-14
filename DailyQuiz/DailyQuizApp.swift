@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct DailyQuizApp: App {
+    @StateObject
+    var historyManager = HistoryManager();
+    
     var body: some Scene {
         WindowGroup {
             MainMenu()
+                .environmentObject(historyManager)
         }
     }
 }

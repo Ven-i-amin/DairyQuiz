@@ -33,5 +33,6 @@ struct DefaultButton: View {
             .background(backgroundColor)
             .containerShape(RoundedRectangle(cornerRadius: 16))
         }
+        .disabled(!isActive)
     }
 }

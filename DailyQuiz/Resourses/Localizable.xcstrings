@@ -1,5 +1,5 @@
 {
-  "sourceLanguage" : "en",
+  "sourceLanguage" : "ru",
   "strings" : {
     "CantReturn" : {
       "extractionState" : "manual",
@@ -188,9 +188,6 @@
         }
       }
     },
-    "Question" : {
-
-    },
     "QuestionCount" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -208,8 +205,15 @@
         }
       }
     },
-    "QuestionNum" : {
-
+    "Quiz %lld" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quiz %lld"
+          }
+        }
+      }
     },
     "RatingText" : {
       "extractionState" : "manual",
@@ -255,9 +259,6 @@
         }
       }
     },
-    "Uoifhdsk;jaflk;s" : {
-
-    },
     "Welcome" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -265,6 +266,27 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Добро пожаловать в DailyQuiz!"
+          }
+        }
+      }
+    },
+    "YourAnswers" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Твои ответы"
+          }
+        }
+      }
+    },
+    "ZeroQuiz" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет квизов"
           }
         }
       }
